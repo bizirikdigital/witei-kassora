@@ -1,396 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Calculadora de Presupuestos</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calculadora de Reformas</title>
   <style>
-    .presupuesto-section {
-      max-width: 1000px;
-      margin: auto;
-      padding: 40px;
-      border-radius: 10px;
-      background: url('https://i.ibb.co/fV42cgYF/fotofondo.jpg') no-repeat center center;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-image: url('https://i.ibb.co/kBftD6G/bg-fondo.jpg');
       background-size: cover;
-      box-shadow: 0 0 20px rgba(0,0,0,0.2);
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background-position: center;
+      background-repeat: no-repeat;
     }
 
-    .presupuesto-section h2 {
+    .presupuesto-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      margin-top: 40px;
+    }
+
+    h2 {
       text-align: center;
+      color: #333;
       margin-bottom: 30px;
-      color: #ffffff;
     }
 
-    .presupuesto-section .form-group {
-      margin-bottom: 20px;
+    .form-group {
+      margin-bottom: 30px;
     }
 
-    .presupuesto-section .form-group label {
+    .form-group label {
       display: block;
-      margin-bottom: 10px;
       font-weight: bold;
+      margin-bottom: 10px;
     }
 
-    .presupuesto-section input[type="number"] {
-      width: 100%;
-      padding: 10px;
-      border-radius: 5px;
-      border: none;
-    }
-
-    .presupuesto-section .options-container,
-    .presupuesto-section .quality-options {
+    .options-container {
       display: flex;
-      gap: 20px;
       flex-wrap: wrap;
-      margin-bottom: 20px;
+      gap: 20px;
+      justify-content: center;
     }
 
-    .presupuesto-section .option,
-    .presupuesto-section .quality-option {
+    .option, .quality-option {
       flex: 1;
       min-width: 200px;
       text-align: center;
       padding: 20px;
-      background: #ffffffcc;
+      background: rgba(255, 255, 255, 0.85);
       border-radius: 10px;
       cursor: pointer;
-      transition: transform 0.3s;
+      transition: all 0.3s ease;
       color: #000;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
 
-    .presupuesto-section .option:hover,
-    .presupuesto-section .quality-option:hover {
-      transform: scale(1.05);
+    .option:hover, .quality-option:hover {
+      transform: scale(1.03);
+      border-color: #cbc4bc;
     }
 
-    .presupuesto-section .option.selected,
-    .presupuesto-section .quality-option.selected {
+    .option.selected, .quality-option.selected {
       background-color: #cbc4bc;
       color: #000;
+      border-color: #8e837a;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     }
 
-    .presupuesto-section .option img {
+    .option img {
       width: 100%;
-      height: 120px;
+      height: 140px;
       object-fit: cover;
       border-radius: 8px;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    .presupuesto-section .result-box {
-      background: #ffffffcc;
-      color: #000;
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      margin-bottom: 20px;
-      font-size: 24px;
-      font-weight: bold;
+    input[type="number"], input[type="email"] {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
     }
 
-    .presupuesto-section .summary-container {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 30px;
-      color: #fff;
-    }
-
-    .presupuesto-section .summary-column {
-      width: 48%;
-    }
-
-    .presupuesto-section .summary-column h3 {
-      margin-bottom: 10px;
-      color: #fff;
-    }
-
-    .presupuesto-section .summary-column ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .presupuesto-section .summary-column ul li::before {
-      content: '✔';
-      margin-right: 8px;
-      color: #cbc4bc;
-    }
-
-    .presupuesto-section .hidden {
-      display: none;
-    }
-
-    .presupuesto-section button {
+    button {
       background-color: #cbc4bc;
       color: #000;
       padding: 12px 24px;
       border: none;
       border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s ease;
-      display: block;
-      margin: 20px auto;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    .presupuesto-section button:hover {
-      background-color: #b8b0a8;
-    }
-
-    .presupuesto-section textarea {
-      width: 100%;
-      height: 80px;
-      border-radius: 8px;
-      padding: 10px;
-      font-family: inherit;
-      font-size: 14px;
-      resize: vertical;
-    }
-
-    .popup {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-
-    .popup-content {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-    }
-
-    .popup-content input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 15px;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-
-    .popup-content button {
-      background-color: #cbc4bc;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 6px;
       font-weight: bold;
-      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #8e837a;
+      color: #fff;
     }
   </style>
 </head>
 <body>
-
-<section class="presupuesto-section">
-  <h2>Calcula tu presupuesto</h2>
-
- <div id="popupCorreo" class="popup hidden">
-  <div class="popup-content">
-    <p>Introduce tus datos para continuar:</p>
-    <input type="text" id="nombreUsuario" placeholder="Nombre y apellidos">
-    <input type="tel" id="telefonoUsuario" placeholder="Teléfono móvil">
-    <button onclick="confirmarContacto()">Enviar</button>
-  </div>
-</div>
-
-  <div class="form-group">
-    <label for="metros">¿Cuántos metros cuadrados tiene tu obra?</label>
-    <input type="number" id="metros" placeholder="Ej: 80">
-  </div>
-
-  <div class="form-group">
-    <label>¿Qué tipo de reforma deseas?</label>
-    <div class="options-container">
-      <div class="option" onclick="selectReforma('integral', event)">
-        <img src="https://i.ibb.co/9mMnr5j9/reformaintegral.jpg" alt="Reforma Integral">
-        Reforma Integral
+  <div class="presupuesto-section">
+    <h2>Calculadora de Reformas</h2>
+    <form id="presupuestoForm">
+      <div class="form-group">
+        <label>¿Qué tipo de reforma deseas?</label>
+        <div class="options-container">
+          <div class="option" onclick="selectReforma('integral', event)">
+            <img src="https://i.ibb.co/9mMnr5j9/reformaintegral.jpg" alt="Reforma Integral">
+            Reforma Integral
+          </div>
+          <div class="option" onclick="selectReforma('baño', event)">
+            <img src="https://i.ibb.co/7xyJRqS7/reformaba-o.jpg" alt="Reforma Baño">
+            Reforma de Baño
+          </div>
+          <div class="option" onclick="selectReforma('cocina', event)">
+            <img src="https://i.ibb.co/mr2mLwpM/reformacocina.jpg" alt="Reforma Cocina">
+            Reforma de Cocina
+          </div>
+          <div class="option" onclick="selectReforma('otros', event)">
+            <img src="https://i.ibb.co/cXvzvd0m/otros.jpg" alt="Otros">
+            Otros
+          </div>
+        </div>
       </div>
-      <div class="option" onclick="selectReforma('baño', event)">
-        <img src="https://i.ibb.co/7xyJRqS7/reformaba-o.jpg" alt="Reforma Baño">
-        Reforma de Baño
+      <div class="form-group">
+        <label for="metros">¿Cuántos metros cuadrados deseas reformar?</label>
+        <input type="number" id="metros" name="metros" required />
       </div>
-      <div class="option" onclick="selectReforma('cocina', event)">
-        <img src="https://i.ibb.co/mr2mLwpM/reformacocina.jpg" alt="Reforma Cocina">
-        Reforma de Cocina
+      <div class="form-group">
+        <label>Calidad de la reforma:</label>
+        <div class="options-container">
+          <div class="quality-option" onclick="selectCalidad('básica', event)">Básica</div>
+          <div class="quality-option" onclick="selectCalidad('media', event)">Media</div>
+          <div class="quality-option" onclick="selectCalidad('premium', event)">Premium</div>
+        </div>
       </div>
-      <div class="option" onclick="selectReforma('otros', event)">
-        <img src="https://i.ibb.co/cXvzvd0m/otros.jpg" alt="Otros">
-        Otros
+      <div class="form-group">
+        <label for="email">Introduce tu email para ver el presupuesto:</label>
+        <input type="email" id="email" name="email" required />
       </div>
-    </div>
-  </div>
-
-  <div id="calidadContainer" class="quality-options hidden">
-    <div class="quality-option" onclick="selectCalidad('baja', event)">Calidad Baja</div>
-    <div class="quality-option" onclick="selectCalidad('media', event)">Calidad Media</div>
-    <div class="quality-option" onclick="selectCalidad('alta', event)">Calidad Alta</div>
-  </div>
-
-  <div id="otrosTexto" class="form-group hidden">
-    <textarea id="descripcionOtros" placeholder="Describe tu reforma"></textarea>
-    <button onclick="mandarSolicitudOtros()">Mandar Solicitud</button>
+      <div class="form-group">
+        <button type="submit">Calcular Presupuesto</button>
+      </div>
+    </form>
   </div>
 
-  <button id="btnCalcularPresupuesto" onclick="calcularPresupuesto()">Calcular Presupuesto Reforma</button>
+  <script>
+    let tipoReforma = "";
+    let calidad = "";
 
-  <div id="resultado" class="result-box hidden"></div>
-
-  <button id="btnCalcularProyecto" onclick="calcularProyecto()" class="hidden">Calcular Proyecto</button>
-
-  <div id="resultadoProyecto" class="result-box hidden"></div>
-
-  <div id="resumen" class="hidden">
-    <div class="summary-container">
-      <div class="summary-column">
-        <h3>📑 Documentación entregada</h3>
-        <ul>
-          <li>Presupuesto detallado</li>
-          <li>Memoria descriptiva de la reforma</li>
-          <li>Plano o renders con visor 3D</li>
-          <li>Diagrama de la obra</li>
-          <li>Modelo de contrato</li>
-          <li>Licencias o tramitación (si aplica)</li>
-          <li>Datos de contacto y asesor asignado</li>
-          <li>Dossier Visual presentación (opcional)</li>
-        </ul>
-      </div>
-      <div class="summary-column">
-        <h3>🛡️ Garantías ofrecidas</h3>
-        <ul>
-          <li>Contrato de obra</li>
-          <li>Penalizaciones por retraso</li>
-          <li>Garantías post-obra</li>
-          <li>Informes semanales de avances</li>
-          <li>Documentación fotográfica</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<script>
-  let tipo = '';
-  let calidad = '';
-  let metros = 0;
-  let datosUsuario = {};
-
-  function selectReforma(value, event) {
-    tipo = value;
-    document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
-
-    document.getElementById('calidadContainer').classList.toggle('hidden', tipo !== 'integral');
-    document.getElementById('otrosTexto').classList.toggle('hidden', tipo !== 'otros');
-    document.getElementById('btnCalcularPresupuesto').classList.toggle('hidden', tipo === 'otros');
-  }
-
-  function selectCalidad(value, event) {
-    calidad = value;
-    document.querySelectorAll('.quality-option').forEach(opt => opt.classList.remove('selected'));
-    event.currentTarget.classList.add('selected');
-  }
-
-  function calcularPresupuesto() {
-    metros = parseFloat(document.getElementById("metros").value);
-    if (isNaN(metros) || metros <= 0 || !tipo || (tipo === 'integral' && !calidad)) {
-      alert("Por favor rellena todos los campos correctamente.");
-      return;
+    function selectReforma(tipo, event) {
+      tipoReforma = tipo;
+      document.querySelectorAll('.option').forEach(el => el.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
     }
 
-    datosUsuario = { metros, tipo, calidad };
-    mostrarPopupCorreo();
-  }
-
-  function mostrarPopupCorreo() {
-    document.getElementById("popupCorreo").classList.remove("hidden");
-  }
-
-function confirmarContacto() {
-  const nombre = document.getElementById("nombreUsuario").value.trim();
-  const telefono = document.getElementById("telefonoUsuario").value.trim();
-
-  if (nombre === '' || telefono === '') {
-    alert("Por favor, completa todos los campos.");
-    return;
-  }
-
-  const telefonoValido = /^\d{9}$/.test(telefono); // Ajusta si aceptas otros formatos
-  if (!telefonoValido) {
-    alert("Por favor, introduce un teléfono válido de 9 cifras.");
-    return;
-  }
-
-  datosUsuario.nombre = nombre;
-  datosUsuario.telefono = telefono;
-
-  document.getElementById("popupCorreo").classList.add("hidden");
-
-  if (tipo === 'otros') {
-    document.getElementById('resumen').classList.remove('hidden');
-  } else {
-    mostrarPresupuesto();
-  }
-}
-
-    datosUsuario.correo = correo;
-    document.getElementById("popupCorreo").classList.add("hidden");
-
-    if (tipo === 'otros') {
-      document.getElementById('resumen').classList.remove('hidden');
-    } else {
-      mostrarPresupuesto();
-    }
-  }
-
-  function mostrarPresupuesto() {
-    let precio = 0;
-    if (tipo === 'integral') {
-      if (calidad === 'baja') precio = 1000;
-      if (calidad === 'media') precio = 1200;
-      if (calidad === 'alta') precio = 1600;
-    } else {
-      precio = 2500;
+    function selectCalidad(valor, event) {
+      calidad = valor;
+      document.querySelectorAll('.quality-option').forEach(el => el.classList.remove('selected'));
+      event.currentTarget.classList.add('selected');
     }
 
-    const total = metros * precio;
-    const resultadoDiv = document.getElementById("resultado");
-    resultadoDiv.innerHTML = `Presupuesto estimado: <strong>${total.toLocaleString()} €</strong>`;
-    resultadoDiv.classList.remove('hidden');
+    document.getElementById("presupuestoForm").addEventListener("submit", function(event) {
+      event.preventDefault();
 
-    if (tipo === 'integral') {
-      document.getElementById('btnCalcularProyecto').classList.remove('hidden');
-    }
+      const metros = parseInt(document.getElementById("metros").value);
+      const email = document.getElementById("email").value;
 
-    document.getElementById('resumen').classList.remove('hidden');
-    console.log("Datos del usuario:", datosUsuario);
-  }
+      if (!tipoReforma || !calidad || !metros || !email) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
 
-  function calcularProyecto() {
-    const resultadoDiv = document.getElementById("resultadoProyecto");
-    resultadoDiv.innerHTML = `Coste adicional del proyecto: <strong>2.000 €</strong>`;
-    resultadoDiv.classList.remove('hidden');
-  }
+      let precioM2 = 0;
+      if (calidad === "básica") precioM2 = 400;
+      else if (calidad === "media") precioM2 = 600;
+      else if (calidad === "premium") precioM2 = 850;
 
-  function mandarSolicitudOtros() {
-    const descripcion = document.getElementById("descripcionOtros").value.trim();
-    if (!descripcion) {
-      alert("Por favor describe tu reforma antes de mandar la solicitud.");
-      return;
-    }
-    datosUsuario = { tipo, descripcion };
-    mostrarPopupCorreo();
-  }
-</script>
+      const presupuesto = metros * precioM2;
+
+      alert(`Presupuesto estimado: ${presupuesto.toLocaleString()} €\\nSe enviará una copia a ${email}`);
+    });
+  </script>
 </body>
 </html>
