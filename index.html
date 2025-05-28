@@ -47,6 +47,11 @@
       cursor: pointer;
     }
 
+    button:disabled {
+      background-color: #7A8664;
+      cursor: not-allowed;
+    }
+
     .hidden {
       display: none;
     }
@@ -159,7 +164,7 @@
 
     <div id="metros-group" class="hidden">
       <label for="metros">Metros cuadrados</label>
-      <input type="number" id="metros" placeholder="Introduce los m²">
+      <input type="number" id="metros" placeholder="Introduce los m²" oninput="validarMetros()">
     </div>
 
     <div id="calidad-group" class="hidden">
@@ -177,7 +182,7 @@
       <button onclick="mostrarPopup()">Mandar solicitud</button>
     </div>
 
-    <button id="calcularBtn" class="hidden" onclick="mostrarPopup()">Calcular Presupuesto de la Reforma</button>
+    <button id="calcularBtn" class="hidden" onclick="mostrarPopup()" disabled>Calcular Presupuesto de la Reforma</button>
   </div>
 
   <div id="popup" class="popup">
@@ -220,43 +225,39 @@
   </div>
 
   <script>
-    const metrosGroup = document.getElementById('metros-group');
-    const calidadGroup = document.getElementById('calidad-group');
+    const metrosInput = document.getElementById('metros');
     const calcularBtn = document.getElementById('calcularBtn');
-    const otrosGroup = document.getElementById('otros-group');
-    const preview = document.getElementById('preview');
-    const popup = document.getElementById('popup');
-    const resumen = document.getElementById('resumen');
-    const resultado = document.getElementById('resultado');
 
     function seleccionarReforma(tipo) {
-      metrosGroup.classList.add('hidden');
-      calidadGroup.classList.add('hidden');
+      document.getElementById('tipo').value = tipo;
+      document.getElementById('preview').src = '';
+      document.getElementById('metros-group').classList.add('hidden');
+      document.getElementById('calidad-group').classList.add('hidden');
+      document.getElementById('otros-group').classList.add('hidden');
       calcularBtn.classList.add('hidden');
-      otrosGroup.classList.add('hidden');
-      preview.classList.remove('hidden');
 
       if (tipo === 'integral') {
-        preview.src = 'https://i.ibb.co/9mMnr5j9/reformaintegral.jpg';
-        metrosGroup.classList.remove('hidden');
-        calidadGroup.classList.remove('hidden');
+        document.getElementById('preview').src = 'https://i.ibb.co/9mMnr5j9/reformaintegral.jpg';
+        document.getElementById('metros-group').classList.remove('hidden');
+        document.getElementById('calidad-group').classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-        document.getElementById('tipo').value = 'integral';
       } else if (tipo === 'cocina') {
-        preview.src = 'https://i.ibb.co/mr2mLwpM/reformacocina.jpg';
-        metrosGroup.classList.remove('hidden');
+        document.getElementById('preview').src = 'https://i.ibb.co/mr2mLwpM/reformacocina.jpg';
+        document.getElementById('metros-group').classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-        document.getElementById('tipo').value = 'cocina';
       } else if (tipo === 'baño') {
-        preview.src = 'https://i.ibb.co/7xyJRqS7/reformaba-o.jpg';
-        metrosGroup.classList.remove('hidden');
+        document.getElementById('preview').src = 'https://i.ibb.co/7xyJRqS7/reformaba-o.jpg';
+        document.getElementById('metros-group').classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-        document.getElementById('tipo').value = 'baño';
       } else if (tipo === 'otros') {
-        preview.src = 'https://i.ibb.co/cXvzvd0m/otros.jpg';
-        otrosGroup.classList.remove('hidden');
-        document.getElementById('tipo').value = 'otros';
+        document.getElementById('preview').src = 'https://i.ibb.co/cXvzvd0m/otros.jpg';
+        document.getElementById('otros-group').classList.remove('hidden');
       }
+    }
+
+    function validarMetros() {
+      const m2 = parseFloat(metrosInput.value);
+      calcularBtn.disabled = isNaN(m2) || m2 <= 0;
     }
 
     function mostrarPopup() {
@@ -264,9 +265,15 @@
     }
 
     function calcularPresupuesto() {
-      const nombre = document.getElementById('nombre').value;
-      const telefono = document.getElementById('telefono').value;
-      const m2 = parseFloat(document.getElementById('metros').value);
+      const nombre = document.getElementById('nombre').value.trim();
+      const telefono = document.getElementById('telefono').value.trim();
+      const telefonoValido = /^\+?\d{9,15}$/.test(telefono);
+      if (!nombre || !telefonoValido) {
+        alert("Por favor, introduce un nombre válido y un número de teléfono correcto (9 a 15 dígitos).");
+        return;
+      }
+
+      const m2 = parseFloat(metrosInput.value);
       let precio = 0;
       const tipoValue = document.getElementById('tipo').value;
 
