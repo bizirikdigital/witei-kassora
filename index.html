@@ -9,13 +9,13 @@
       font-family: Arial, sans-serif;
       background: url('https://i.ibb.co/fV42cgYF/fotofondo.jpg') no-repeat center center fixed;
       background-size: cover;
-      color: #fff;
+      color: #CBC4BC;
     }
 
     .presupuesto-section {
       max-width: 900px;
       margin: 40px auto;
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: rgba(43, 46, 52, 0.9);
       padding: 30px;
       border-radius: 10px;
     }
@@ -23,6 +23,7 @@
     h2, h3 {
       text-align: center;
       margin-bottom: 20px;
+      color: #A47C65;
     }
 
     label, select, input, textarea {
@@ -32,11 +33,13 @@
       border: none;
       border-radius: 5px;
       font-size: 16px;
+      background-color: #2B2E34;
+      color: #CBC4BC;
     }
 
     button {
-      background-color: #ffaa00;
-      color: #000;
+      background-color: #A47C65;
+      color: #fff;
       border: none;
       padding: 12px;
       border-radius: 5px;
@@ -53,15 +56,15 @@
       top: 0; left: 0;
       width: 100%; height: 100%;
       background-color: rgba(0,0,0,0.8);
-      display: flex;
+      display: none;
       justify-content: center;
       align-items: center;
       z-index: 999;
     }
 
     .popup-content {
-      background: #fff;
-      color: #000;
+      background: #CBC4BC;
+      color: #2B2E34;
       padding: 30px;
       border-radius: 10px;
       width: 90%;
@@ -80,7 +83,7 @@
     .summary-column {
       flex: 1;
       min-width: 250px;
-      background-color: rgba(255,255,255,0.1);
+      background-color: rgba(91, 113, 113, 0.2);
       padding: 20px;
       border-radius: 10px;
     }
@@ -140,7 +143,7 @@
     <button id="calcularBtn" class="hidden" onclick="mostrarPopup()">Calcular Presupuesto de la Reforma</button>
   </div>
 
-  <div id="popup" class="popup hidden">
+  <div id="popup" class="popup">
     <div class="popup-content">
       <h3>Introduce tus datos</h3>
       <input type="text" id="nombre" placeholder="Nombre y Apellidos">
@@ -220,7 +223,7 @@
     });
 
     function mostrarPopup() {
-      popup.classList.remove('hidden');
+      popup.style.display = 'flex';
     }
 
     function calcularPresupuesto() {
@@ -236,7 +239,7 @@
       } else if (tipoValue === 'cocina' || tipoValue === 'baño') {
         precio = m2 * 2500;
       } else if (tipoValue === 'otros') {
-        popup.classList.add('hidden');
+        popup.style.display = 'none';
         resumen.classList.remove('hidden');
         resultado.innerHTML = `<strong>${nombre}</strong>, hemos recibido tu solicitud. Te contactaremos en breve.`;
         return;
@@ -245,7 +248,7 @@
       const gestion = m2 * 100;
       resultado.innerHTML = `<strong>${nombre}</strong>, tu presupuesto estimado es <strong>${precio.toLocaleString()} €</strong>.<br>Coste del proyecto: <strong>${gestion.toLocaleString()} €</strong>`;
 
-      popup.classList.add('hidden');
+      popup.style.display = 'none';
       resumen.classList.remove('hidden');
     }
   </script>
