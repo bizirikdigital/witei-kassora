@@ -97,6 +97,37 @@
       padding: 5px 0;
     }
 
+    .reforma-options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-bottom: 30px;
+    }
+
+    .reforma-card {
+      width: 200px;
+      height: 150px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 10px;
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      text-align: center;
+      font-weight: bold;
+      color: white;
+      padding: 10px;
+      background-blend-mode: overlay;
+      transition: transform 0.2s;
+    }
+
+    .reforma-card:hover {
+      transform: scale(1.05);
+    }
+
     .img-preview {
       width: 100%;
       max-height: 200px;
@@ -109,14 +140,20 @@
 <body>
   <div class="presupuesto-section">
     <h2>Calculadora de Presupuesto</h2>
-    <label for="tipo">Tipo de Reforma</label>
-    <select id="tipo">
-      <option value="">Selecciona una opción</option>
-      <option value="integral">Reforma Integral</option>
-      <option value="cocina">Reforma de Cocina</option>
-      <option value="baño">Reforma de Baño</option>
-      <option value="otros">Otros</option>
-    </select>
+    <div class="reforma-options">
+      <div class="reforma-card" onclick="seleccionarReforma('integral')" style="background-image: url('https://i.ibb.co/9mMnr5j9/reformaintegral.jpg'); background-color: rgba(0,0,0,0.4);">
+        Reforma Integral
+      </div>
+      <div class="reforma-card" onclick="seleccionarReforma('cocina')" style="background-image: url('https://i.ibb.co/mr2mLwpM/reformacocina.jpg'); background-color: rgba(0,0,0,0.4);">
+        Reforma de Cocina
+      </div>
+      <div class="reforma-card" onclick="seleccionarReforma('baño')" style="background-image: url('https://i.ibb.co/7xyJRqS7/reformaba-o.jpg'); background-color: rgba(0,0,0,0.4);">
+        Reforma de Baño
+      </div>
+      <div class="reforma-card" onclick="seleccionarReforma('otros')" style="background-image: url('https://i.ibb.co/cXvzvd0m/otros.jpg'); background-color: rgba(0,0,0,0.4);">
+        Otros
+      </div>
+    </div>
 
     <img id="preview" class="img-preview hidden" src="" alt="Vista previa">
 
@@ -128,9 +165,9 @@
     <div id="calidad-group" class="hidden">
       <label for="calidad">Calidad de la Reforma</label>
       <select id="calidad">
-        <option value="1000">Calidad Baja - 1000 €/m²</option>
-        <option value="1200">Calidad Media - 1200 €/m²</option>
-        <option value="1600">Calidad Alta - 1600 €/m²</option>
+        <option value="1000">Calidad Baja</option>
+        <option value="1200">Calidad Media</option>
+        <option value="1600">Calidad Alta</option>
       </select>
     </div>
 
@@ -183,7 +220,6 @@
   </div>
 
   <script>
-    const tipo = document.getElementById('tipo');
     const metrosGroup = document.getElementById('metros-group');
     const calidadGroup = document.getElementById('calidad-group');
     const calcularBtn = document.getElementById('calcularBtn');
@@ -193,34 +229,35 @@
     const resumen = document.getElementById('resumen');
     const resultado = document.getElementById('resultado');
 
-    tipo.addEventListener('change', () => {
-      const value = tipo.value;
+    function seleccionarReforma(tipo) {
       metrosGroup.classList.add('hidden');
       calidadGroup.classList.add('hidden');
       calcularBtn.classList.add('hidden');
       otrosGroup.classList.add('hidden');
       preview.classList.remove('hidden');
 
-      if (value === 'integral') {
+      if (tipo === 'integral') {
         preview.src = 'https://i.ibb.co/9mMnr5j9/reformaintegral.jpg';
         metrosGroup.classList.remove('hidden');
         calidadGroup.classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-      } else if (value === 'cocina') {
+        document.getElementById('tipo').value = 'integral';
+      } else if (tipo === 'cocina') {
         preview.src = 'https://i.ibb.co/mr2mLwpM/reformacocina.jpg';
         metrosGroup.classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-      } else if (value === 'baño') {
+        document.getElementById('tipo').value = 'cocina';
+      } else if (tipo === 'baño') {
         preview.src = 'https://i.ibb.co/7xyJRqS7/reformaba-o.jpg';
         metrosGroup.classList.remove('hidden');
         calcularBtn.classList.remove('hidden');
-      } else if (value === 'otros') {
+        document.getElementById('tipo').value = 'baño';
+      } else if (tipo === 'otros') {
         preview.src = 'https://i.ibb.co/cXvzvd0m/otros.jpg';
         otrosGroup.classList.remove('hidden');
-      } else {
-        preview.classList.add('hidden');
+        document.getElementById('tipo').value = 'otros';
       }
-    });
+    }
 
     function mostrarPopup() {
       popup.style.display = 'flex';
@@ -231,7 +268,7 @@
       const telefono = document.getElementById('telefono').value;
       const m2 = parseFloat(document.getElementById('metros').value);
       let precio = 0;
-      const tipoValue = tipo.value;
+      const tipoValue = document.getElementById('tipo').value;
 
       if (tipoValue === 'integral') {
         const calidad = parseFloat(document.getElementById('calidad').value);
@@ -252,5 +289,6 @@
       resumen.classList.remove('hidden');
     }
   </script>
+  <input type="hidden" id="tipo">
 </body>
 </html>
